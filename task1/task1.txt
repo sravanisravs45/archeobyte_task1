@@ -1,0 +1,31 @@
+# Check if there is GPU or not
+!nvidia-smi
+# Install tensorflow 2.3.0
+!pip install -q tensorflow==2.3.0
+# Clone the TensorFlow models Repo
+!git clone --depth 1 -b v2.3.0 https://github.com/tensorflow/models.git
+!pip install -Uqr models/official/requirements.txt
+# Imports
+import sys
+import numpy as np
+import tensorflow as tf
+import tensorflow_hub as hub
+sys.path.append('models')
+from official.nlp.data import classifier_data_lib
+from official.nlp.bert import tokenization
+from official.nlp import optimization
+
+# keras imports
+from tf.keras.layers import Input, Dropout, Dense
+from tf.keras.optimizers import Adam
+from tf.keras.metrics import BinaryAccuracy
+from tf.keras.losses import BinaryCrossentropy
+from tf.keras.utils import plot_model
+from tf.keras.models import Model
+# Load the Quora Insincrere QUesrtion dataset.
+df = pd.read_csv(
+'https://archive.org/download/fine-tune-bert-tensorflow-train.csv/train.csv.zip',
+				compression='zip')
+df.head()
+# plot the histogram of sincere and insincere question vs sincere ques
+df.target.plot(kind='hist', title='Sincere (0) vs Insincere (1) distribution')
